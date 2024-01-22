@@ -14,16 +14,11 @@ export class UserService {
 
   async create(user: CreateUserDto) {
     try {
-      const existUser = await this.userRepository.findOne({
-        where: { email: user.email },
-      });
-      if (existUser) throw new BadRequestException('This email already exist');
       return await this.userRepository.save({
         ...user,
         password: await argon2.hash(user.password),
       });
     } catch (error) {
-      console.log('error', error);
       throw new BadRequestException(error);
     }
   }
