@@ -5,7 +5,12 @@ import { DatabaseModule } from './db/database.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), UserModule, DatabaseModule, AuthModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    UserModule,
+    DatabaseModule,
+    AuthModule,
+  ],
   controllers: [],
   providers: [],
 })
