@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Post,
   Request,
@@ -23,7 +24,7 @@ export class AuthController {
 
   @Post('registration')
   @UsePipes(new ValidationPipe())
-  async registration(dto: CreateUserDto) {
+  async registration(@Body() dto: CreateUserDto) {
     return await this.authService.registration(dto);
   }
 
