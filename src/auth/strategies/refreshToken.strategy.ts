@@ -6,10 +6,13 @@ import { IUser } from '@app/user/interfaces/user.interface';
 import { EnvVariable } from '@app/enum/env-variable.enum';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
+export class RefreshJwtStrategy extends PassportStrategy(
+  Strategy,
+  'jwt-refresh',
+) {
   constructor(private readonly configService: ConfigService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromBodyField('refresh'),
       ignoreExpiration: false,
       secretOrKey: configService.get<string>(EnvVariable.JWT_SECRET),
     });

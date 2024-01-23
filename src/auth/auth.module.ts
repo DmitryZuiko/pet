@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { EnvVariable } from '@app/enum/env-variable.enum';
+import { RefreshJwtStrategy } from './strategies/refreshToken.strategy';
 
 @Module({
   imports: [
@@ -18,13 +19,13 @@ import { EnvVariable } from '@app/enum/env-variable.enum';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>(EnvVariable.JWT_SECRET),
         signOptions: {
-          expiresIn: configService.get<string>(EnvVariable.EXPIRES_IN),
+          expiresIn: configService.get<string>(EnvVariable.ACCESS_EXPIRES_IN),
         },
       }),
       inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy, JwtStrategy, RefreshJwtStrategy],
 })
 export class AuthModule {}
