@@ -29,9 +29,7 @@ export class AuthService {
     }
 
     const isAuthenticate = await argon2.verify(user.password, password);
-    if (isAuthenticate) {
-      return user;
-    }
+    if (isAuthenticate) return user;
 
     throw new UnauthorizedException(ErrorVariable.WrongPass);
   }
