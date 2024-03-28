@@ -9,11 +9,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { EnvVariable } from '@app/enum/env-variable.enum';
 import { RefreshJwtStrategy } from './strategies/refreshToken.strategy';
+import { GoogleStrategy } from './strategies/google.strategy';
+import { SessionSerializer } from './utils/Serializer';
 
 @Module({
   imports: [
     UserModule,
-    PassportModule,
+    PassportModule.register({ session: true }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
@@ -26,6 +28,13 @@ import { RefreshJwtStrategy } from './strategies/refreshToken.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, RefreshJwtStrategy],
+  providers: [
+    AuthService,
+    LocalStrategy,
+    JwtStrategy,
+    RefreshJwtStrategy,
+    GoogleStrategy,
+    SessionSerializer,
+  ],
 })
 export class AuthModule {}

@@ -13,6 +13,8 @@ import * as argon2 from 'argon2';
 import { AuthErrors } from './enum/authError.enum';
 import { ConfigService } from '@nestjs/config';
 import { EnvVariable } from '@app/enum/env-variable.enum';
+import { IGoogleUser } from '../user/interfaces/google-user.interface';
+import { User } from '@app/user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -32,6 +34,12 @@ export class AuthService {
     if (isAuthenticate) return user;
 
     throw new UnauthorizedException(ErrorVariable.WrongPass);
+  }
+
+  async validateGoogleUser(userData: IGoogleUser): Promise<User | IGoogleUser> {
+    const user = await this.userService.findOne(userData.email);
+    if (user) return user;
+    return await this.userService.createGoogleUser(userData);
   }
 
   async registration(user: CreateUserDto) {
